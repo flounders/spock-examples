@@ -45,10 +45,32 @@ app = do
       p_ . toHtml $ "You are visit number " `T.append` (T.pack . show $ visitNumber) `T.append` "!"
       p_ "Please put your name in the guestbook."
       p_ $ a_ [href_ "guestbook"] "Guestbook") "ExampleApp"
-  get "guestbook" $
-    undefined
-  post "guestbook" $
-    undefined
+  get "guestbook" $ do
+    guests <- runQuery (\x -> query_ x "SELECT * FROM guest" :: IO [Only Text])
+    html . toStrict . renderText $ pageTemplate (do
+      h1_ "Guest List"
+      guestsTemplate guests
+      h1_ "Guest Sign In"
+      form_ [action_ "guestbook", method_ "post"] $ do
+        label_ "Name: "
+        input_ [type_ "text", name_ "name"]
+        input_ [type_ "submit"]) "ExampleApp Guestbook"
+  post "guestbook" $ do
+    ps <- params
+    runQuery (\x -> execute x "INSERT INTO guest VALUES(?)" (Only . snd . Prelude.head $ filter (\x -> "name" == fst x) ps))
+    redirect "guestbook"
+
+guestsTemplate :: Monad m => [Only Text] -> HtmlT m ()
+guestsTemplate xs = do
+  table_ $ do
+    tr_ $ do
+      th_ "Guest"
+    sequence_ $ map f xs
+  where f :: Monad m => Only Text -> HtmlT m ()
+        f (Only x) = do
+          tr_ $ do
+            td_ $ toHtml x
+
 
 createGuestTable :: Query
 createGuestTable = "CREATE TABLE IF NOT EXISTS guest (name TEXT)"
