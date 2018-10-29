@@ -1,6 +1,6 @@
-name:                spock-examples
+name:                guest-database
 version:             0.1.0.0
-synopsis:            Simple project template from stack
+synopsis:            Modification of the Spock guest counter to use a database.
 description:         Please see README.md
 homepage:            https://github.com/flounders/spock-examples#readme
 license:             BSD3
@@ -13,7 +13,7 @@ build-type:          Simple
 cabal-version:       >=1.10
 extra-source-files:  README.md
 
-executable spock-examples
+executable guest-database
   hs-source-dirs:      src
   main-is:             Main.hs
   default-language:    Haskell2010
