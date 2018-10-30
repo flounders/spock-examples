@@ -9,7 +9,4 @@ recommended that you use stack to build these.
 ## Current Examples
 
 * guest-database: This extends the initial Spock tutorial to not only count visitors, but allow visitors to sign a guestbook.
-
-## Upcoming
-
 * rendering: This shows how to make use of the blaze-html templating library with Spock. The same functions should work with any other templating library.
